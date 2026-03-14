@@ -1,5 +1,5 @@
 """
-exporter.py - Saves scraped articles to Excel and organises PDF files.
+exporter.py - Saves scraped articles to Excel and organizes PDF files.
 
 The Excel workbook contains one sheet per journal (or one combined sheet)
 with all available metadata fields as columns.
@@ -24,7 +24,7 @@ class Exporter:
 
         exporter = Exporter(save_dir="/path/to/output")
         exporter.to_excel(articles, filename="papers.xlsx")
-        exporter.organise_pdfs(articles)
+        exporter.organize_pdfs(articles)
     """
 
     # Excel column headers in display order
@@ -173,14 +173,14 @@ class Exporter:
     # PDF organisation
     # ------------------------------------------------------------------
 
-    def organise_pdfs(self, articles: List[Article], pdf_dir: Optional[str] = None) -> None:
+    def organize_pdfs(self, articles: List[Article], pdf_dir: Optional[str] = None) -> None:
         """
         Rename and move all downloaded PDFs to a structured directory.
 
         Target filename format: '{FirstAuthor} {Year} {JournalAbbr} {Title}.pdf'
 
         Args:
-            articles: Articles whose ``pdf_path`` should be organised.
+            articles: Articles whose ``pdf_path`` should be organized.
             pdf_dir: Destination directory for PDFs. Defaults to save_dir/pdfs.
         """
         dest_dir = pdf_dir or os.path.join(self.save_dir, "pdfs")

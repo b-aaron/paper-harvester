@@ -397,7 +397,7 @@ class CLI:
             filename = f"papers_{timestamp}.xlsx"
             exporter = Exporter(save_dir=save_path)
             exporter.to_excel(all_articles, filename=filename)
-            exporter.organise_pdfs(all_articles)
+            exporter.organize_pdfs(all_articles)
         else:
             print(_c("\n[3/4] Excel export skipped.", Fore.YELLOW if _COLOR else ""))
 
