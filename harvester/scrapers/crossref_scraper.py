@@ -15,6 +15,8 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from .base_scraper import Article, BaseScraper
 
@@ -41,10 +43,59 @@ class CrossRefScraper(BaseScraper):
         """
         self.email = email
         self.rate_limit = rate_limit
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"User-Agent": f"paper-harvester/1.0 (mailto:{email})"}
+        self.session = self._build_session()
+
+    def _build_session(self) -> requests.Session:
+        """Create a requests session with conservative retry behavior."""
+        session = requests.Session()
+        # Avoid inheriting broken system proxy settings that can trigger
+        # ProxyError/SSLEOF on CrossRef and Unpaywall requests.
+        session.trust_env = False
+        session.headers.update(
+            {
+                "User-Agent": f"paper-harvester/1.0 (mailto:{self.email})",
+                # Avoid stale keep-alive TLS connections that can trigger EOF errors.
+                "Connection": "close",
+            }
         )
+
+        retry = Retry(
+            total=2,
+            connect=2,
+            read=2,
+            backoff_factor=0.8,
+            status_forcelist=(429, 500, 502, 503, 504),
+            allowed_methods=("GET",),
+            raise_on_status=False,
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount("https://", adapter)
+        session.mount("http://", adapter)
+        return session
+
+    def _get_with_ssl_retries(
+        self,
+        url: str,
+        params: Optional[Dict] = None,
+        timeout: int = 30,
+        attempts: int = 3,
+    ) -> requests.Response:
+        """GET with explicit retries for transient TLS/SSL handshake failures."""
+        last_exc: Optional[Exception] = None
+        for attempt in range(1, attempts + 1):
+            try:
+                return self.session.get(url, params=params, timeout=timeout)
+            except requests.exceptions.SSLError as exc:
+                last_exc = exc
+                if attempt == attempts:
+                    break
+                # Rebuild session to force a fresh TLS handshake next try.
+                self.session.close()
+                self.session = self._build_session()
+                time.sleep(min(2.0 * attempt, 5.0))
+        if last_exc:
+            raise last_exc
+        raise requests.RequestException("Unknown request failure")
 
     # ------------------------------------------------------------------
     # Public interface
@@ -145,8 +196,10 @@ class CrossRefScraper(BaseScraper):
 
         while len(items) < max_results:
             try:
-                resp = self.session.get(
-                    url, params={**params, "cursor": cursor}, timeout=30
+                resp = self._get_with_ssl_retries(
+                    url,
+                    params={**params, "cursor": cursor},
+                    timeout=30,
                 )
                 resp.raise_for_status()
                 data = resp.json()
@@ -257,7 +310,7 @@ class CrossRefScraper(BaseScraper):
         if not self.email or "@" not in self.email:
             return None
         try:
-            resp = self.session.get(
+            resp = self._get_with_ssl_retries(
                 f"{self.UNPAYWALL_BASE}/{doi}",
                 params={"email": self.email},
                 timeout=15,

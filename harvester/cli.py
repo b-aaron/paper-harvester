@@ -384,6 +384,7 @@ class CLI:
             downloader = PDFDownloader(
                 save_dir=pdf_dir,
                 institutional_credentials=creds,
+                unpaywall_email=email,
                 use_google_scholar=self.settings.get("google_scholar_fallback", True),
             )
             all_articles = downloader.download(all_articles)
