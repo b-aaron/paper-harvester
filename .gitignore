@@ -1,0 +1,27 @@
+# Python byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# User settings
+.paper_harvester_settings.json
+
+# Downloaded files (user-generated content)
+*.xlsx
+pdfs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp

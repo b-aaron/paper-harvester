@@ -1,0 +1,69 @@
+{
+  "presets": {
+    "utd24": {
+      "name": "UTD24",
+      "description": "University of Texas at Dallas 24 journals for business school research ranking",
+      "journal_ids": [
+        "ms", "mktsc", "jae", "jar", "tar", "jf", "jfe", "rfs",
+        "asq", "jibs", "jom", "jms", "smj", "amj", "amr",
+        "jm", "jmr", "jcr", "isr", "jmis", "misq", "or", "joop", "pom"
+      ]
+    },
+    "ft50": {
+      "name": "FT50",
+      "description": "Financial Times 50 journals used for business school research rankings",
+      "journal_ids": [
+        "ms", "mktsc", "jae", "jar", "tar", "jf", "jfe", "rfs",
+        "asq", "jibs", "jom", "jms", "smj", "amj", "amr",
+        "jm", "jmr", "jcr", "isr", "jmis", "misq", "or", "joop", "pom",
+        "aos", "car", "ecta", "etp", "hbr", "hr", "jap", "jbe", "jbv",
+        "jcp", "jfqa", "jpe", "jams", "os", "ost", "obhdp", "qje",
+        "rp", "ras", "rf", "so", "wes", "job", "jeea"
+      ]
+    },
+    "abs4": {
+      "name": "ABS4",
+      "description": "Academic Journal Guide rated 4 and 4* journals (selection of key journals)",
+      "journal_ids": [
+        "ms", "mktsc", "jf", "jfe", "rfs", "asq", "jom", "smj", "amj", "amr",
+        "jm", "jmr", "jcr", "isr", "misq", "or",
+        "aos", "jap", "jams", "ost", "rp", "job", "bjm", "jcb", "ijrm"
+      ]
+    },
+    "marketing_utd": {
+      "name": "Marketing (UTD+FT)",
+      "description": "Marketing journals included in both UTD24 and FT50 lists",
+      "journal_ids": ["ms", "mktsc", "jm", "jmr", "jcr"]
+    },
+    "marketing_comprehensive": {
+      "name": "Marketing Comprehensive",
+      "description": "All marketing-related journals across UTD24, FT50 and ABS4",
+      "journal_ids": ["ms", "mktsc", "jm", "jmr", "jcr", "jcp", "jams", "jcb", "ijrm"]
+    },
+    "finance": {
+      "name": "Finance",
+      "description": "Finance journals in UTD24 and FT50",
+      "journal_ids": ["jf", "jfe", "rfs", "jfqa", "rf"]
+    },
+    "accounting": {
+      "name": "Accounting",
+      "description": "Accounting journals in UTD24 and FT50",
+      "journal_ids": ["jae", "jar", "tar", "aos", "car", "ras"]
+    },
+    "management": {
+      "name": "Management",
+      "description": "Management and organizational behavior journals in UTD24 and FT50",
+      "journal_ids": ["ms", "asq", "jibs", "jom", "jms", "smj", "amj", "amr", "os", "ost", "hr", "job"]
+    },
+    "information_systems": {
+      "name": "Information Systems",
+      "description": "Information systems journals in UTD24",
+      "journal_ids": ["isr", "jmis", "misq"]
+    },
+    "operations": {
+      "name": "Operations",
+      "description": "Operations and management science journals in UTD24",
+      "journal_ids": ["ms", "or", "joop", "pom"]
+    }
+  }
+}
