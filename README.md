@@ -143,28 +143,39 @@ This repository supports a skill-driven workflow for research proposal and liter
 3. Draft proposal/review with explicit evidence links (DOI/URL).  
    在 proposal/review 中为关键论断附 DOI/URL 证据链接。
 
-### Local skill file example / 本地 Skill 文件示例
+### Install this skill with git / 通过 git 安装该 Skill
 
-Create a local skill at:
+This repository now includes a sanitized `SKILL.md` at the repository root (no local machine paths).
 
-```text
-~/.agents/skills/paper-harvester-grounded-zotero/SKILL.md
+本仓库已在根目录提供脱敏后的 `SKILL.md`（不包含任何本地机器路径信息）。
+
+Clone directly into your skills folder:
+
+直接克隆到你的 skills 目录：
+
+**Windows (PowerShell):**
+
+```powershell
+git clone --depth 1 https://github.com/b-aaron/paper-harvester.git "$HOME\.agents\skills\paper-harvester-grounded-zotero"
 ```
 
-Example content:
+**macOS / Linux:**
 
-```md
----
-name: paper-harvester-grounded-zotero
-description: Grounded literature harvesting + Zotero sync workflow.
----
-
-Run:
-python <repo-path>/grounded_harvest.py --require-doi --citation-formats apa,gbt,ieee --zotero
-
-Only cite generated verified artifacts; never invent references.
+```bash
+git clone --depth 1 https://github.com/b-aaron/paper-harvester.git ~/.agents/skills/paper-harvester-grounded-zotero
 ```
 
+If you already cloned before, update skill content with:
+
+如果你之前已经克隆过，可用以下命令更新 Skill：
+
+```powershell
+git -C "$HOME\.agents\skills\paper-harvester-grounded-zotero" pull
+```
+
+```bash
+git -C ~/.agents/skills/paper-harvester-grounded-zotero pull
+```
 
 ---
 
