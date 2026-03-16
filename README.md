@@ -165,8 +165,6 @@ python <repo-path>/grounded_harvest.py --require-doi --citation-formats apa,gbt,
 Only cite generated verified artifacts; never invent references.
 ```
 
-> Note / 说明：In this environment, the current local skill file is  
-> `C:\Users\86158\.agents\skills\paper-harvester-grounded-zotero\SKILL.md`.
 
 ---
 
