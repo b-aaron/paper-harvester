@@ -4,6 +4,10 @@ Paper Harvester is a Python tool for harvesting real academic papers from busine
 
 Paper Harvester 是一个 Python 文献采集工具，可从商科与管理学期刊检索真实论文，导出结构化结果，并同步到 Zotero。
 
+Paper Harverster also can be used as a skill for Agent, triggerd by lieterature searching and reivew tasks, which help prevent LLM inventing literatures.
+
+Paper Harvester 也可作为Agent的Skill用于文献检索、综述撰写等任务，可有效降低AI幻觉编造参考文献的概率，并提高参考文献质量。
+
 ---
 
 ## Features / 功能特点
