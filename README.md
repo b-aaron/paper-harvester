@@ -1,39 +1,60 @@
-# Paper Harvester
+# Paper Harvester / 论文文献采集器
 
-A Python tool for scraping the latest academic papers from top business and management journals (UTD24, FT50, ABS4 and custom lists).
+Paper Harvester is a Python tool for harvesting real academic papers from business and management journals, exporting structured outputs, and syncing to Zotero.
 
-## Features
+Paper Harvester 是一个 Python 文献采集工具，可从商科与管理学期刊检索真实论文，导出结构化结果，并同步到 Zotero。
 
-- **Comprehensive journal coverage** – Pre-configured with all UTD24 and FT50 journals, and a selection of ABS4 journals. Full metadata database in `config/journals.json`.
-- **Flexible time ranges** – Scrape the latest issue, the last N months/years, a custom date range, or everything available.
-- **Rich metadata** – Retrieves title, authors, journal, year, volume/issue, pages, DOI, abstract, keywords, and publisher via the CrossRef REST API (free, no login required).
-- **PDF download cascade** –
-  1. Open-access PDF via [Unpaywall](https://unpaywall.org/api/v2) (legal, free).
-  2. Institutional EZProxy / Shibboleth login (Selenium-powered, optional).
-  3. Google Scholar fallback via the `scholarly` library.
-- **Excel export** – All metadata saved to a `.xlsx` workbook (one sheet per journal or combined), with PDFs renamed `Author Year Journal Title.pdf`.
-- **Zotero integration** – Automatically create items in your personal or group Zotero library, with optional PDF attachment.
-- **Fully interactive CLI** – Menu-driven interface; no command-line flags required.
-- **Custom journal lists** – Add/remove journals and create custom presets via the interactive menu or by editing the JSON config files.
-- **Persistent settings** – Credentials, save path, and preferences stored in `~/.paper_harvester_settings.json`.
+---
 
-## Quick Start
+## Features / 功能特点
 
-### 1. Install dependencies
+- **Comprehensive journal coverage / 期刊覆盖全面**  
+  Pre-configured with UTD24, FT50, ABS4, plus custom journal lists from JSON config files.  
+  内置 UTD24、FT50、ABS4，并支持通过 JSON 配置自定义期刊列表。
+
+- **Flexible time ranges / 时间范围灵活**  
+  Latest issue, last N months/years, custom date range, or all available records.  
+  支持“最新一期、近 N 月/年、自定义日期区间、全部可用记录”等模式。
+
+- **Rich metadata / 元数据丰富**  
+  Retrieves title, authors, journal, year, volume/issue, pages, DOI, abstract, keywords, publisher, URL.  
+  可获取题名、作者、期刊、年份、卷期、页码、DOI、摘要、关键词、出版社、URL。
+
+- **Grounded outputs for writing / 防幻觉写作输出**  
+  Generates verified reference artifacts (`json` + `md`) and citation files in APA / GB/T 7714 / IEEE formats.  
+  生成可核验的参考文献产物（`json` + `md`）以及 APA / GB/T 7714 / IEEE 引用格式文件。
+
+- **PDF download cascade / PDF 下载级联**  
+  OA sources first (Unpaywall), then fallback strategies.  
+  优先开放获取来源（Unpaywall），再走后备策略。
+
+- **Zotero integration / Zotero 集成**  
+  Saves items to personal/group library and can attach downloaded PDFs.  
+  可将条目写入个人/群组 Zotero 文库，并可附加已下载 PDF。
+
+- **Interactive + headless workflows / 交互式 + 非交互式流程**  
+  Use menu CLI (`main.py`) or automation-friendly script (`grounded_harvest.py`).  
+  可用菜单 CLI（`main.py`）或自动化脚本（`grounded_harvest.py`）。
+
+---
+
+## Quick Start / 快速开始
+
+### 1) Install dependencies / 安装依赖
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Run
+### 2) Interactive mode / 交互模式
 
 ```bash
 python main.py
 ```
 
-You will be presented with the main menu:
+Main menu / 主菜单:
 
-```
+```text
 ========== MAIN MENU ==========
   1. Scrape articles
   2. Manage journal list
@@ -41,9 +62,7 @@ You will be presented with the main menu:
   4. Exit
 ```
 
-### 3. Headless mode (for skills/agents)
-
-For non-interactive, evidence-grounded workflows (for proposal/literature-review writing), use:
+### 3) Headless grounded mode / 非交互防幻觉模式
 
 ```bash
 python grounded_harvest.py \
@@ -58,110 +77,202 @@ python grounded_harvest.py \
   --save-path "D:\Research\paper_harvest"
 ```
 
-This command generates:
-
-- `verified_references_*.json` – machine-readable verified citation candidates
-- `verified_references_*.md` – quick reference list for drafting
-- `verified_references_apa_*.txt` – APA-style references
-- `verified_references_gbt7714_*.txt` – GB/T 7714-style references
-- `verified_references_ieee_*.txt` – IEEE-style references
-- optional Excel/PDF outputs and Zotero library items (when enabled)
-
-To see all options:
+See all options / 查看全部参数:
 
 ```bash
 python grounded_harvest.py --help
 ```
 
-## Project Structure
+### 4) Generated outputs / 生成文件
 
+- `verified_references_*.json`  
+  Machine-readable verified references.  
+  机器可读的可核验参考文献。
+
+- `verified_references_*.md`  
+  Human-readable verified reference list for drafting.  
+  适合写作场景的人类可读参考文献清单。
+
+- `verified_references_apa_*.txt`  
+  APA citation lines.  
+  APA 格式参考文献列表。
+
+- `verified_references_gbt7714_*.txt`  
+  GB/T 7714 citation lines.  
+  GB/T 7714 格式参考文献列表。
+
+- `verified_references_ieee_*.txt`  
+  IEEE citation lines.  
+  IEEE 格式参考文献列表。
+
+- Optional: Excel and PDFs / 可选：Excel 与 PDF 文件。
+
+---
+
+## Copilot Skill: Grounded Writing + Zotero / Copilot Skill：防幻觉写作 + Zotero
+
+This repository supports a skill-driven workflow for research proposal and literature review writing.
+
+本仓库支持用于研究计划与文献综述写作的 Skill 工作流。
+
+### What the skill enforces / Skill 强制规则
+
+1. Never invent papers/DOIs/authors/venues/years.  
+   不得编造论文、DOI、作者、刊名、年份。
+
+2. Harvest first, write later.  
+   先检索后写作。
+
+3. Prefer DOI-backed references (`--require-doi`).  
+   优先使用带 DOI 的文献（`--require-doi`）。
+
+4. If evidence is missing, explicitly state insufficient evidence.  
+   若证据不足，必须明确标注“证据不足”。
+
+5. Every citation must map to generated verified artifacts.  
+   每条引用都必须可追溯到已生成的 verified 文件。
+
+### Skill usage workflow / Skill 使用流程
+
+1. Run `grounded_harvest.py` to collect verified references and sync Zotero (optional).  
+   运行 `grounded_harvest.py` 获取可核验文献，并可选同步 Zotero。
+
+2. Use only generated outputs for citations (`json`/`md`/citation txt).  
+   仅使用输出文件（`json`/`md`/引用格式 txt）中的文献进行写作引用。
+
+3. Draft proposal/review with explicit evidence links (DOI/URL).  
+   在 proposal/review 中为关键论断附 DOI/URL 证据链接。
+
+### Local skill file example / 本地 Skill 文件示例
+
+Create a local skill at:
+
+```text
+~/.agents/skills/paper-harvester-grounded-zotero/SKILL.md
 ```
+
+Example content:
+
+```md
+---
+name: paper-harvester-grounded-zotero
+description: Grounded literature harvesting + Zotero sync workflow.
+---
+
+Run:
+python <repo-path>/grounded_harvest.py --require-doi --citation-formats apa,gbt,ieee --zotero
+
+Only cite generated verified artifacts; never invent references.
+```
+
+> Note / 说明：In this environment, the current local skill file is  
+> `C:\Users\86158\.agents\skills\paper-harvester-grounded-zotero\SKILL.md`.
+
+---
+
+## Project Structure / 项目结构
+
+```text
 paper-harvester/
-├── main.py                         # Entry point
-├── requirements.txt                # Python dependencies
+├── main.py                         # Interactive entry / 交互入口
+├── grounded_harvest.py             # Headless grounded workflow / 非交互防幻觉流程
+├── requirements.txt                # Python dependencies / 依赖
 ├── config/
-│   ├── journals.json               # Journal database (name, ISSN, publisher, URL, list membership)
-│   └── presets.json                # Named journal presets (utd24, ft50, marketing_utd, …)
+│   ├── journals.json               # Journal metadata / 期刊元数据
+│   └── presets.json                # Preset journal groups / 预设期刊组
 └── harvester/
-    ├── __init__.py
-    ├── cli.py                      # Interactive CLI
-    ├── config_manager.py           # Journal config & user settings management
-    ├── downloader.py               # PDF downloader (Unpaywall → institutional → Scholar)
-    ├── exporter.py                 # Excel export & PDF file organisation
-    ├── zotero_client.py            # Zotero Web API integration
+    ├── cli.py                      # Interactive CLI / 交互式 CLI
+    ├── config_manager.py           # Config & settings / 配置与设置
+    ├── downloader.py               # PDF downloader / PDF 下载
+    ├── exporter.py                 # Excel export / Excel 导出
+    ├── zotero_client.py            # Zotero API integration / Zotero API 集成
     └── scrapers/
-        ├── __init__.py
-        ├── base_scraper.py         # Abstract base class & Article dataclass
-        └── crossref_scraper.py     # CrossRef REST API scraper + Unpaywall lookup
+        ├── base_scraper.py
+        └── crossref_scraper.py
 ```
 
-## Configuration
+---
 
-### Journal database (`config/journals.json`)
+## Configuration / 配置说明
 
-Each entry contains:
+### Journal database (`config/journals.json`) / 期刊数据库
 
-| Field | Description |
-|---|---|
-| `id` | Short unique key (e.g. `"ms"`) |
-| `name` | Full journal name |
-| `issn_print` / `issn_electronic` | ISSNs used to query CrossRef |
-| `publisher` | Publisher name |
-| `website` | Journal homepage |
-| `lists` | Array of list memberships: `"utd24"`, `"ft50"`, `"abs4"` |
-| `field` | Research area (e.g. `"marketing"`) |
+| Field | Description (EN) | 说明（中文） |
+|---|---|---|
+| `id` | Short journal key | 期刊短 ID |
+| `name` | Full journal name | 期刊全称 |
+| `issn_print` / `issn_electronic` | ISSN used for CrossRef queries | 用于 CrossRef 查询的 ISSN |
+| `publisher` | Publisher name | 出版社 |
+| `website` | Journal website | 期刊主页 |
+| `lists` | Membership tags (`utd24`, `ft50`, `abs4`, etc.) | 列表标签（如 `utd24`、`ft50`、`abs4`） |
+| `field` | Research field | 学科领域 |
 
-### Presets (`config/presets.json`)
+### Presets (`config/presets.json`) / 预设期刊组
 
-Named groups of journals for quick selection. Edit this file or use the "Manage journal list" menu to add custom presets.
+Built-in examples include: `utd24`, `ft50`, `abs4`, `marketing_comprehensive`, `finance`, `accounting`, `management`.
 
-Built-in presets:
+内置示例包括：`utd24`、`ft50`、`abs4`、`marketing_comprehensive`、`finance`、`accounting`、`management`。
 
-| Preset ID | Description |
-|---|---|
-| `utd24` | UTD 24 journals |
-| `ft50` | Financial Times 50 journals |
-| `abs4` | ABS Guide 4/4* journals (selection) |
-| `marketing_utd` | Marketing journals in UTD24 |
-| `marketing_comprehensive` | All marketing journals across all lists |
-| `finance` | Finance journals |
-| `accounting` | Accounting journals |
-| `management` | Management journals |
-| `information_systems` | IS journals in UTD24 |
-| `operations` | Operations & MS journals |
+### User settings (`~/.paper_harvester_settings.json`) / 用户设置
 
-### User settings (`~/.paper_harvester_settings.json`)
+- `save_path`: output directory / 输出目录  
+- `unpaywall_email`: polite-pool email / Unpaywall 邮箱  
+- `zotero_library_id`, `zotero_api_key`, `zotero_library_type`: Zotero credentials / Zotero 凭据  
+- `institutional_org`, `institutional_username`, `institutional_password`: institutional login / 机构登录信息  
+- `google_scholar_fallback`: enable fallback / 是否启用 Scholar 回退
 
-Updated via the Settings menu. Includes:
+---
 
-- `save_path` – Where Excel files and PDFs are saved.
-- `unpaywall_email` – Your email for Unpaywall API polite-pool access.
-- `zotero_library_id`, `zotero_api_key`, `zotero_library_type` – Zotero credentials.
-- `institutional_org`, `institutional_username`, `institutional_password` – For institutional login.
-- `google_scholar_fallback` – Enable/disable Google Scholar as a PDF fallback.
+## PDF Download / PDF 下载
 
-## PDF Download
+PDF retrieval priority:
 
-PDFs are attempted in this order:
+PDF 下载优先级：
 
-1. **Unpaywall** – Free, legal open-access versions discovered during metadata scraping.
-2. **Institutional login** – If you provide your institution's EZProxy/Shibboleth credentials in Settings, Selenium will automate the login.
-3. **Google Scholar** – Last resort; uses the `scholarly` library to search for freely available versions.
+1. **Unpaywall OA links** (legal open-access first).  
+   **Unpaywall 开放获取链接**（优先合法开放版本）。
 
-If no PDF is found, the article metadata is still saved to Excel and Zotero.
+2. **Institutional access fallback** (if credentials are configured).  
+   **机构访问回退**（若已配置机构账号）。
 
-## Zotero Integration
+3. **Google Scholar fallback** as a final attempt.  
+   **Google Scholar 回退**（最后尝试）。
 
-1. Go to [https://www.zotero.org/settings/keys](https://www.zotero.org/settings/keys) and create an API key with read/write access.
-2. Find your numeric library ID at [https://www.zotero.org/settings/keys](https://www.zotero.org/settings/keys) (shown next to "Your userID for use in API calls").
-3. Enter these in **Settings → Configure Zotero** when running the app.
+If no PDF is found, metadata is still exported and can still be synced to Zotero.
 
-## Extending
+若未找到 PDF，元数据仍会导出，并可继续同步到 Zotero。
 
-- **Add a journal**: Use the "Manage journal list → Add a journal" menu, or directly edit `config/journals.json`.
-- **Add a scraper**: Subclass `harvester.scrapers.base_scraper.BaseScraper` and implement `fetch_articles`.
-- **Add a new list**: Add entries to `journals.json` with a new value in the `lists` array, and add a preset in `presets.json`.
+---
 
-## License
+## Zotero Integration / Zotero 集成
+
+1. Create an API key at <https://www.zotero.org/settings/keys> with write permission.  
+   在 <https://www.zotero.org/settings/keys> 创建具有写权限的 API Key。
+
+2. Get your numeric library ID from the same page.  
+   在同一页面获取数字型 library ID。
+
+3. Configure settings in app menu or pass CLI flags to `grounded_harvest.py`.  
+   可在交互菜单中配置，或通过 `grounded_harvest.py` 参数传入。
+
+---
+
+## Extending / 扩展开发
+
+- Add a journal: edit `config/journals.json` or use menu options.  
+  新增期刊：编辑 `config/journals.json` 或使用菜单。
+
+- Add a scraper: subclass `harvester.scrapers.base_scraper.BaseScraper`.  
+  新增抓取器：继承 `harvester.scrapers.base_scraper.BaseScraper`。
+
+- Add a preset: update `config/presets.json`.  
+  新增预设：更新 `config/presets.json`。
+
+- Add a custom list tag in journals and map it in presets.  
+  在期刊配置中新增自定义列表标签，并在 preset 中完成映射。
+
+---
+
+## License / 许可证
 
 MIT
