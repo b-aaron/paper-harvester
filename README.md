@@ -41,6 +41,38 @@ You will be presented with the main menu:
   4. Exit
 ```
 
+### 3. Headless mode (for skills/agents)
+
+For non-interactive, evidence-grounded workflows (for proposal/literature-review writing), use:
+
+```bash
+python grounded_harvest.py \
+  --preset marketing_comprehensive \
+  --mode last_n_months \
+  --n 12 \
+  --max-results 120 \
+  --require-doi \
+  --citation-formats apa,gbt,ieee \
+  --zotero \
+  --zotero-collection "LitReview-Seed" \
+  --save-path "D:\Research\paper_harvest"
+```
+
+This command generates:
+
+- `verified_references_*.json` – machine-readable verified citation candidates
+- `verified_references_*.md` – quick reference list for drafting
+- `verified_references_apa_*.txt` – APA-style references
+- `verified_references_gbt7714_*.txt` – GB/T 7714-style references
+- `verified_references_ieee_*.txt` – IEEE-style references
+- optional Excel/PDF outputs and Zotero library items (when enabled)
+
+To see all options:
+
+```bash
+python grounded_harvest.py --help
+```
+
 ## Project Structure
 
 ```
